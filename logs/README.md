@@ -1,0 +1,1 @@
+Redirect all the log files in this location
