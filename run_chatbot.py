@@ -12,12 +12,14 @@ import model_helper as mp
 import hyper_parameters as hp
 import tensorflow as tf
 
-vocabulary_file_path = 'cache/vocabulary.txt'
+vocabulary_file_path = 'cache/vocabulary'
 model_directory = "./models/"
 buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
 
 
 def run_chatbot():
+
+    print("Running the chatbot from previously trained models ...")
     with tf.Session() as tf_session:
         FLAGS = hp.get_hyperparameter()
         model_instance = mp.make_seq2seq_model(tf_session, False, FLAGS, buckets, model_directory)

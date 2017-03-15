@@ -2,7 +2,7 @@ import preprocessing.data_preprocessor as dp
 import models.seq2seq_model as seq2seq_model
 import tensorflow as tf
 
-dataset_file = 'data/Movie_Dataset'
+dataset_file = 'data/Game_of_thrones_conversation.txt'
 
 def make_seq2seq_model(session, forward_only, FLAGS, buckets, model_directory):
     model = seq2seq_model.Seq2SeqModel(

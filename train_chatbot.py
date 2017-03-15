@@ -22,7 +22,7 @@ y_val_path = 'cache/y_val'
 buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
 model_directory = "./models/"
 checkpoint_name = "ncm.ckpt"
-steps_per_checkpoint = 25000
+steps_per_checkpoint = 5
 
 
 
@@ -30,14 +30,14 @@ def train_chatbot():
     FLAGS = hp.get_hyperparameter()
 
     print("Training the chatbot now.\n The hyperparameters are:")
-    print("batch_size {0}",{FLAGS.batch_size})
-    print("size {0}",{FLAGS.size})
-    print("num_layers {0}",{FLAGS.num_layers})
-    print("vocab_size {0}",{FLAGS.vocab_size})
-    print("LSTM? (if not GRU) {0}",{FLAGS.use_lstm})
-    print("learning_rate {0}",{FLAGS.learning_rate})
-    print("learning_rate_decay {0}",{FLAGS.learning_rate_decay})
-    print("Gradients clip {0}",{FLAGS.gradients_clip})
+    print("batch_size ",FLAGS.__flags["batch_size"])
+    print("size ",FLAGS.size)
+    print("num_layers ",{FLAGS.num_layers})
+    print("vocab_size ",{FLAGS.vocab_size})
+    print("LSTM? (if not GRU) ",{FLAGS.use_lstm})
+    print("learning_rate ",{FLAGS.learning_rate})
+    print("learning_rate_decay ",{FLAGS.learning_rate_decay})
+    print("Gradients clip ",{FLAGS.gradients_clip})
 
 
     # Avoids using all the GPUs available
@@ -49,8 +49,8 @@ def train_chatbot():
         model_instance = mp.make_seq2seq_model(tf_session, False, FLAGS, buckets, model_directory)
 
         print("Reading development and training data")
-        validation_set = data_helper.read_data(X_val_path, y_val_path)
-        training_set = data_helper.read_data(X_train_path, y_train_path)
+        validation_set = data_helper.read_data(X_val_path, y_val_path, buckets)
+        training_set = data_helper.read_data(X_train_path, y_train_path,buckets)
         train_bucket_sizes = [len(training_set[b]) for b in xrange(len(buckets))]
         train_total_size = float(sum(train_bucket_sizes))
 

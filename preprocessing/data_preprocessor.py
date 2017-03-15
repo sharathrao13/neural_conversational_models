@@ -2,7 +2,7 @@ import re
 import collections
 
 vocabulary_size = 10000
-vocabulary_path = "../cache/vocabulary"
+vocabulary_path = "cache/vocabulary"
 
 X_train_path = 'cache/X_train'
 y_train_path = 'cache/y_train'
@@ -42,7 +42,7 @@ def generate_encoded_files(tokenized_sentences, dictionary):
 
     last_line = tokenized_sentences.pop()
     first_line = tokenized_sentences.pop(0)
-    dev_counter = int(len(tokenized_sentences) - len(tokenized_sentences) / fraction_dev)
+    dev_counter = int(len(tokenized_sentences) - len(tokenized_sentences) /50)
 
     unk_id = dictionary['_UNK']
     first_line_encoded = encode_sentence(first_line, dictionary, unk_id)
