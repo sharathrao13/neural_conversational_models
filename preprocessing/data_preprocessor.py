@@ -38,7 +38,7 @@ def create_save_dictionary(words, vocabulary_path, vocabulary_size):
 def generate_encoded_files(tokenized_sentences, dictionary):
 
     encoded_holder = []
-    f1 = open(x_train_file, 'w')
+    f1 = open(X_train_path, 'w')
 
     last_line = tokenized_sentences.pop()
     first_line = tokenized_sentences.pop(0)
@@ -54,7 +54,7 @@ def generate_encoded_files(tokenized_sentences, dictionary):
         f1.write(encoded_sentence + '\n')  # Write sentence to file
     f1.close()
 
-    d1 = open(x_dev_file, 'w')
+    d1 = open(X_val_path, 'w')
     for x in xrange(dev_counter, len(tokenized_sentences)):
         encoded_sentence = encode_sentence(tokenized_sentences[x], dictionary, unk_id)
         encoded_holder.append(encoded_sentence)
@@ -62,14 +62,14 @@ def generate_encoded_files(tokenized_sentences, dictionary):
 
     d1.close()
 
-    f2 = open(y_train_file, 'w')
+    f2 = open(y_train_path, 'w')
 
     for x in xrange(dev_counter + 1):
         f2.write(encoded_holder[x] + '\n')  # Write sentence to file
 
     f2.close()
 
-    d2 = open(y_dev_file, 'w')
+    d2 = open(y_val_path, 'w')
     for x in xrange(dev_counter + 1, len(tokenized_sentences)):
         d2.write(encoded_holder[x] + '\n')  # Write sentence to file
 

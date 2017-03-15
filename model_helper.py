@@ -2,10 +2,12 @@ import preprocessing.data_preprocessor as dp
 import models.seq2seq_model as seq2seq_model
 import tensorflow as tf
 
-def make_seq2seq_model(session, forward_only, FLAGS, _buckets, model_directory):
+dataset_file = 'data/Movie_Dataset'
+
+def make_seq2seq_model(session, forward_only, FLAGS, buckets, model_directory):
     model = seq2seq_model.Seq2SeqModel(
             FLAGS.vocab_size,
-            FLAGS.vocab_size, _buckets,
+            FLAGS.vocab_size, buckets,
             FLAGS.size,
             FLAGS.num_layers,
             FLAGS.gradients_clip,
@@ -21,6 +23,6 @@ def make_seq2seq_model(session, forward_only, FLAGS, _buckets, model_directory):
         model.saver.restore(session, str(checkpoint.model_checkpoint_path))
     else:
         print("No checkpoints found. Starting with new model ...")
-        dp.prepare_dataset_encoded(FLAGS.vocab_size)
+        dp.prepare_dataset_encoded(dataset_file, FLAGS.vocab_size)
         session.run(tf.initialize_all_variables())
     return model

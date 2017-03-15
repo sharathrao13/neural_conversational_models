@@ -13,20 +13,32 @@ import hyper_parameters as hp
 import preprocessing.data_helper as data_helper
 import tensorflow as tf
 
-vocab_path = 'cache/vocabulary.txt'
-dataset_file = 'data/Movie_Dataset'
 
-_buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
+X_train_path = 'cache/X_train'
+y_train_path = 'cache/y_train'
+X_val_path = 'cache/X_val'
+y_val_path = 'cache/y_val'
+
+buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
 model_directory = "./models/"
 checkpoint_name = "ncm.ckpt"
 steps_per_checkpoint = 25000
+
+
 
 def train_chatbot():
     FLAGS = hp.get_hyperparameter()
 
     print("Training the chatbot now.\n The hyperparameters are:")
-    print(type(FLAGS))
-    print(FLAGS)
+    print("batch_size {0}",{FLAGS.batch_size})
+    print("size {0}",{FLAGS.size})
+    print("num_layers {0}",{FLAGS.num_layers})
+    print("vocab_size {0}",{FLAGS.vocab_size})
+    print("LSTM? (if not GRU) {0}",{FLAGS.use_lstm})
+    print("learning_rate {0}",{FLAGS.learning_rate})
+    print("learning_rate_decay {0}",{FLAGS.learning_rate_decay})
+    print("Gradients clip {0}",{FLAGS.gradients_clip})
+
 
     # Avoids using all the GPUs available
     config = tf.ConfigProto()
@@ -34,12 +46,12 @@ def train_chatbot():
 
     with tf.Session(config=config) as tf_session:
 
-        model_instance = mp.make_seq2seq_model(tf_session, False, FLAGS,_buckets, model_directory)
+        model_instance = mp.make_seq2seq_model(tf_session, False, FLAGS, buckets, model_directory)
 
         print("Reading development and training data")
-        validation_set = data_helper.read_data(en_dev, fr_dev)
-        training_set = data_helper.read_data(en_train, fr_train)
-        train_bucket_sizes = [len(training_set[b]) for b in xrange(len(_buckets))]
+        validation_set = data_helper.read_data(X_val_path, y_val_path)
+        training_set = data_helper.read_data(X_train_path, y_train_path)
+        train_bucket_sizes = [len(training_set[b]) for b in xrange(len(buckets))]
         train_total_size = float(sum(train_bucket_sizes))
 
         train_buckets_scale = [sum(train_bucket_sizes[:i + 1]) / train_total_size for i in
@@ -71,7 +83,7 @@ def train_chatbot():
                     tf_session.run(model_instance.learning_rate_decay_op)
                 previous_losses.append(loss)
                 create_checkpoint(model_instance, tf_session)
-                run_cross_validation(validation_set, tf_session, _buckets, model_instance)
+                run_cross_validation(validation_set, tf_session, buckets, model_instance)
                 loss = 0.0
 
 
