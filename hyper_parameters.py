@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 tf.app.flags.DEFINE_integer("batch_size", 64, "Batch size to use during training")
-tf.app.flags.DEFINE_integer("size", 1024, "Size of each model layer")
+tf.app.flags.DEFINE_integer("size", 128, "Size of each model layer")
 tf.app.flags.DEFINE_integer("num_layers", 2, "Number of layers in the model")
 tf.app.flags.DEFINE_integer("vocab_size", 10000, "Vocabulary size")
 tf.app.flags.DEFINE_boolean("use_lstm", False, "Use LSTM as cell")

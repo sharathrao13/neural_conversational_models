@@ -25,8 +25,8 @@ import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 
-import data_preprocessor as dp
-
+PAD_ID = 0
+GO_ID = 1
 
 class Seq2SeqModel(object):
     """Sequence-to-sequence model with attention and for multiple buckets.
@@ -252,13 +252,13 @@ class Seq2SeqModel(object):
             encoder_input, decoder_input = random.choice(data[bucket_id])
 
             # Encoder inputs are padded and then reversed.
-            encoder_pad = [dp.PAD_ID] * (encoder_size - len(encoder_input))
+            encoder_pad = [PAD_ID] * (encoder_size - len(encoder_input))
             encoder_inputs.append(list(reversed(encoder_input + encoder_pad)))
 
             # Decoder inputs get an extra "GO" symbol, and are padded then.
             decoder_pad_size = decoder_size - len(decoder_input) - 1
-            decoder_inputs.append([dp.GO_ID] + decoder_input +
-                                  [dp.PAD_ID] * decoder_pad_size)
+            decoder_inputs.append([GO_ID] + decoder_input +
+                                  [PAD_ID] * decoder_pad_size)
 
         # Now we create batch-major vectors from the data selected above.
         batch_encoder_inputs, batch_decoder_inputs, batch_weights = [], [], []
@@ -282,7 +282,7 @@ class Seq2SeqModel(object):
                 # The corresponding target is decoder_input shifted by 1 forward.
                 if length_idx < decoder_size - 1:
                     target = decoder_inputs[batch_idx][length_idx + 1]
-                if length_idx == decoder_size - 1 or target == dp.PAD_ID:
+                if length_idx == decoder_size - 1 or target == PAD_ID:
                     batch_weight[batch_idx] = 0.0
             batch_weights.append(batch_weight)
         return batch_encoder_inputs, batch_decoder_inputs, batch_weights

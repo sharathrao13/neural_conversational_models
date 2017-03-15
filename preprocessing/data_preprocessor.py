@@ -4,6 +4,11 @@ import collections
 vocabulary_size = 10000
 vocabulary_path = "../cache/vocabulary"
 
+X_train_path = 'cache/X_train'
+y_train_path = 'cache/y_train'
+X_val_path = 'cache/X_val'
+y_val_path = 'cache/y_val'
+
 PAD_ID = 0
 GO_ID = 1
 EOS_ID = 2
@@ -30,7 +35,7 @@ def create_save_dictionary(words, vocabulary_path, vocabulary_size):
 
     return dictionary, reverse_dictionary
 
-def generate_encoded_files(x_train_file, y_train_file, x_dev_file, y_dev_file, tokenized_sentences, dictionary):
+def generate_encoded_files(tokenized_sentences, dictionary):
 
     encoded_holder = []
     f1 = open(x_train_file, 'w')
@@ -122,11 +127,9 @@ def load_vocabulary(vocabulary_path):
     vocab = dict([(x, y) for (y, x) in enumerate(rev_vocab)])
     return vocab, rev_vocab
 
-def prepare_dataset_encoded(dataset_path, vocabulary_size, path_for_x_train,
-                            path_for_y_train, path_for_x_dev, path_for_y_dev):
+def prepare_dataset_encoded(dataset_path, vocabulary_size):
 
     data = read_data(dataset_path)
     dictionary, reverse_dictionary = create_save_dictionary(data, vocabulary_path, vocabulary_size)
     sentences = read_data(dataset_path, read_as_sentence=True)
-    generate_encoded_files(path_for_x_train, path_for_y_train, path_for_x_dev, path_for_y_dev, sentences,
-                           dictionary)
+    generate_encoded_files(sentences,dictionary)

@@ -1,5 +1,5 @@
-import data_preprocessor as prepros
-import seq2seq_model
+import preprocessing.data_preprocessor as dp
+import models.seq2seq_model as seq2seq_model
 import tensorflow as tf
 
 def make_seq2seq_model(session, forward_only, FLAGS, _buckets, model_directory):
@@ -21,6 +21,6 @@ def make_seq2seq_model(session, forward_only, FLAGS, _buckets, model_directory):
         model.saver.restore(session, str(checkpoint.model_checkpoint_path))
     else:
         print("No checkpoints found. Starting with new model ...")
-        prepros.prepare_dataset_encoded(FLAGS.vocab_size)
+        dp.prepare_dataset_encoded(FLAGS.vocab_size)
         session.run(tf.initialize_all_variables())
     return model

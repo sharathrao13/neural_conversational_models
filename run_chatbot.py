@@ -7,18 +7,20 @@ import sys
 import numpy as np
 from six.moves import xrange
 
-import data_preprocessor as dp
+import preprocessing.data_preprocessor as dp
 import model_helper as mp
 import hyper_parameters as hp
+import tensorflow as tf
 
 vocab_path = 'cache/vocabulary.txt'
+model_directory = "./models/"
 _buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
 
 
 def run_chatbot():
     with tf.Session() as tf_session:
         FLAGS = hp.get_hyperparameter()
-        model_instance = mp.make_seq2seq_model(tf_session, False, FLAGS, _buckets)
+        model_instance = mp.make_seq2seq_model(tf_session, False, FLAGS, _buckets, model_directory)
         model_instance.batch_size = 1
         vocab, rev_vocab = dp.load_vocabulary(vocab_path)
 

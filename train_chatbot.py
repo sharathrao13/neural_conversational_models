@@ -10,14 +10,11 @@ import numpy as np
 from six.moves import xrange
 import model_helper as mp
 import hyper_parameters as hp
-import data_helper
+import preprocessing.data_helper as data_helper
+import tensorflow as tf
 
 vocab_path = 'cache/vocabulary.txt'
-path_for_x_train = 'cache/X_train'
-path_for_y_train = 'cache/y_train'
-path_for_x_dev = 'cache/X_val'
-path_for_y_dev = 'cache/y_val'
-dataset_file = '../data/Movie_Dataset'
+dataset_file = 'data/Movie_Dataset'
 
 _buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
 model_directory = "./models/"
@@ -37,7 +34,7 @@ def train_chatbot():
 
     with tf.Session(config=config) as tf_session:
 
-        model_instance = mp.make_seq2seq_model(tf_session, False, FLAGS,_buckets)
+        model_instance = mp.make_seq2seq_model(tf_session, False, FLAGS,_buckets, model_directory)
 
         print("Reading development and training data")
         validation_set = data_helper.read_data(en_dev, fr_dev)
